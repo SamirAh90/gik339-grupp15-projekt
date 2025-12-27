@@ -31,3 +31,22 @@ function fetchData() {
       }
     });
 }
+
+console.log(userForm);
+userForm.addEventListener("submit", handleSubmit);
+
+function handleSubmit(e) {
+  e.preventDefault();
+  const serverUserObject = {
+    firstName: "",
+    lastName: "",
+    username: "",
+    color: "",
+  };
+  serverUserObject.firstName = userForm.firstName.value;
+  serverUserObject.lastName = userForm.lastName.value;
+  serverUserObject.username = userForm.username.value;
+  serverUserObject.color = userForm.color.value;
+
+  console.log(serverUserObject);
+}
