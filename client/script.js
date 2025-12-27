@@ -31,3 +31,29 @@ function fetchData() {
       }
     });
 }
+
+// Make sure your form has an id="userForm" in your HTML
+const userForm = document.getElementById("userForm");
+
+console.log(userForm); // should now log the form element
+
+userForm.addEventListener("submit", handleSubmit);
+
+function handleSubmit(e) {
+  e.preventDefault();
+  const serverUserObject = {
+    firstName: " ",
+    lastName: " ",
+    username: " ",
+    color: " ",
+  };
+  serverUserObject.firstName = userForm.firstName.value;
+
+  serverUserObject.lastName = userForm.lastName.value;
+
+  serverUserObject.username = userForm.username.value;
+
+  serverUserObject.color = userForm.color.value;
+
+  console.log(serverUserObject);
+}
