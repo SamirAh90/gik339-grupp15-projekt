@@ -49,4 +49,16 @@ function handleSubmit(e) {
   serverUserObject.color = userForm.color.value;
 
   console.log(serverUserObject);
+  const request = new Request(url, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+    },
+    body: JSON.stringify(serverUserObject),
+  });
+
+  fetch(request).then((response) => {
+    console.log(response);
+    userForm.reset();
+  });
 }

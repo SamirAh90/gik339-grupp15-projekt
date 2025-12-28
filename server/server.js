@@ -1,5 +1,5 @@
-const sqlite = require("sqlite3").verbose();
-const db = new sqlite.Database("./gik339.db");
+const sqlite3 = require("sqlite3").verbose();
+const db = new sqlite3.Database("./gik339.db");
 
 const express = require("express");
 const server = express();
@@ -26,5 +26,21 @@ server.get("/res", (req, res) => {
     if (err) {
       res.status(500).send({ error: err.message });
     } else res.send(rows);
+  });
+});
+
+server.post("/res", (req, res) => {
+  const resdata = req.body; // renamed to avoid conflict
+  const sql =
+    "INSERT INTO res (firstName, lastName, username, color) VALUES (?, ?, ?, ?)";
+
+  db.run(sql, Object.values(resdata), function (err) {
+    if (err) {
+      console.log(err);
+      res.status(500).send({ error: err.message });
+    } else {
+      // Respond once with JSON including the new id and a message
+      res.status(201).json({ id: this.lastID, message: "Användare tillagd" });
+    }
   });
 });
