@@ -1,7 +1,11 @@
-const sqlite3 = require("sqlite3").verbose();
-const db = new sqlite3.Database("./gik339.db");
+const sqlite = require("sqlite3").verbose();
 const express = require("express");
 const server = express();
+
+const db = new sqlite.Database("./plants.db", (err) => {
+  if (err) console.error(err.message);
+  else console.log("Ansluten till SQLite-databasen.");
+});
 
 server
   .use(express.json())
@@ -14,55 +18,58 @@ server
   });
 
 server.listen(3000, () => {
-  console.log("Server is running on port http://localhost:3000");
+  console.log("Server körs på http://localhost:3000");
+  
+  db.run(`CREATE TABLE IF NOT EXISTS plants (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL,
+      species TEXT NOT NULL,
+      water TEXT NOT NULL,
+      height INTEGER NOT NULL,
+      color TEXT NOT NULL
+    )`);
 });
 
-// Hämta ALLA användare
-server.get("/res", (req, res) => {
-  const sql = "SELECT * FROM res";
-
-  db.all(sql, [], (err, rows) => {
-    if (err) {
-      res.status(500).send({ error: err.message });
-    } else {
-      // VIKTIG FIX: Skicka hela arrayen 'rows', inte bara 'rows[0]'
-      res.send(rows);
-    }
+server.get("/plants", (req, res) => {
+  const sql = "SELECT * FROM plants";
+  db.all(sql, (err, rows) => {
+    if (err) res.status(500).send(err);
+    else res.send(rows);
   });
 });
 
-// Hämta EN användare via ID
-server.get("/res/:id", (req, res) => {
-  const id = Number(req.params.id);
-  const sql = "SELECT * FROM res WHERE id = ?";
-
+server.get("/plants/:id", (req, res) => {
+  const id = req.params.id;
+  const sql = "SELECT * FROM plants WHERE id = ?";
   db.get(sql, [id], (err, row) => {
-    if (err) {
-      res.status(500).json({ error: err.message });
-    } else if (!row) {
-      // FIX: Om ingen rad hittas, skicka 404
-      res.status(404).json({ error: "Användaren hittades inte" });
-    } else {
-      res.json(row);
-    }
+    if (err) res.status(500).send(err);
+    else res.send(row);
   });
 });
 
-// Skapa ny användare
-server.post("/res", (req, res) => {
-  const body = req.body;
-  const sql =
-    "INSERT INTO res (firstName, lastName, username, color) VALUES (?, ?, ?, ?)";
+server.post("/plants", (req, res) => {
+  const plant = req.body;
+  const sql = "INSERT INTO plants(name, species, water, height, color) VALUES (?,?,?,?,?)";
+  db.run(sql, [plant.name, plant.species, plant.water, plant.height, plant.color], (err) => {
+    if (err) res.status(500).send(err);
+    else res.send({ message: "Växten sparades" });
+  });
+});
 
-  // FIX: Säkrare att lista variablerna explicit än att använda Object.values()
-  const params = [body.firstName, body.lastName, body.username, body.color];
+server.put("/plants", (req, res) => {
+  const plant = req.body;
+  const sql = "UPDATE plants SET name=?, species=?, water=?, height=?, color=? WHERE id=?";
+  db.run(sql, [plant.name, plant.species, plant.water, plant.height, plant.color, plant.id], (err) => {
+    if (err) res.status(500).send(err);
+    else res.send({ message: "Växten uppdaterades" });
+  });
+});
 
-  db.run(sql, params, function (err) {
-    if (err) {
-      console.log(err);
-      res.status(500).send({ error: err.message });
-    } else {
-      res.status(201).json({ id: this.lastID, message: "Användare tillagd" });
-    }
+server.delete("/plants/:id", (req, res) => {
+  const id = req.params.id;
+  const sql = "DELETE FROM plants WHERE id=?";
+  db.run(sql, [id], (err) => {
+    if (err) res.status(500).send(err);
+    else res.send({ message: "Växten togs bort" });
   });
 });

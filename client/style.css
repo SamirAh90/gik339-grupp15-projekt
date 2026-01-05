@@ -1,0 +1,31 @@
+body {
+  background: linear-gradient(135deg, #1a2e1a 0%, #2d5a2d 50%, #1a2e1a 100%);
+  min-height: 100vh;
+  font-family: "Segoe UI", sans-serif;
+}
+
+header {
+  height: 30vh;
+  overflow: hidden;
+  position: relative;
+  border-bottom: 5px solid rgba(255, 255, 255, 0.1);
+}
+
+.header-image {
+  object-fit: cover;
+  filter: brightness(0.6);
+}
+
+header h1 {
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+}
+
+.plant-card {
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.plant-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.3);
+}

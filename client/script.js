@@ -1,91 +1,131 @@
-const url = "http://localhost:3000/res";
-
-// Hämta formuläret från DOM
-const userForm = document.getElementById("userForm");
+const url = "http://localhost:3000/plants";
 
 window.addEventListener("load", fetchData);
+
+const plantForm = document.getElementById("plantForm");
+const plantIdField = document.getElementById("plantId");
+const listContainer = document.getElementById("listContainer");
 
 function fetchData() {
   fetch(url)
     .then((result) => result.json())
-    .then((users) => {
-      // FIX: Bytte namn från 'res' till 'users' för tydlighet
-      if (users.length > 0) {
-        let html =
-          '<ul class="w-3/4 my-3 mx-auto flex flex-wrap gap-2 justify-center">';
-
-        // FIX: Bytte namn från 'res' till 'user' inuti loopen
-        users.forEach((user) => {
-          html += `<li class="bg-${user.color}-200 basis-1/4 text-${user.color}-900 p-2 rounded-md border-2 border-${user.color}-400 flex flex-col justify-between">
-          <h3>${user.firstName} ${user.lastName}</h3>
-          <p>Användarnamn: ${user.username}</p>
-          <div>
-            <button class="border border-${user.color}-300 hover:bg-white/100 rounded-md bg-white/50 p-1 text-sm mt-2" onclick="setCurrentUser('${user.id}')">
-              Ändra
-            </button>
-            <button class="border border-${user.color}-300 hover:bg-white/100 rounded-md bg-white/50 p-1 text-sm mt-2" onclick="deleteUser('${user.id}')">
-              Ta bort
-            </button>
-          </div>
-        </li>`;
-        });
-        html += "</ul>";
-
-        const listContainer = document.getElementById("listContainer");
-        listContainer.innerHTML = "";
-        listContainer.insertAdjacentHTML("beforeend", html);
-      }
-    })
-    .catch((err) => console.error("Kunde inte hämta lista:", err));
+    .then((plants) => renderList(plants))
+    .catch((err) => console.error(err));
 }
 
-function setCurrentUser(id) {
-  console.log("Hämtar användare med ID:", id);
+function renderList(plants) {
+  listContainer.innerHTML = "";
 
+  if (plants.length > 0) {
+    let html = `<div class="row gap-4 justify-content-center">`;
+    plants.forEach((plant) => {
+      const bg = translateColor(plant.color, 0.3);
+      const border = translateColor(plant.color, 1);
+
+      html += `
+            <div class="col-md-3 card p-3 plant-card" style="background-color: ${bg}; border: 2px solid ${border};">
+                <div class="card-body text-center">
+                    <h3 class="card-title">${plant.name}</h3>
+                    <p class="card-text"><em>${plant.species}</em></p>
+                    <hr>
+                    <p>💧 ${plant.water}</p>
+                    <p>📏 ${plant.height} cm</p>
+                    <div class="d-flex justify-content-between mt-3">
+                        <button class="btn btn-sm btn-light border" onclick="editPlant(${plant.id})">Ändra</button>
+                        <button class="btn btn-sm btn-danger" onclick="deletePlant(${plant.id})">Ta bort</button>
+                    </div>
+                </div>
+            </div>`;
+    });
+    html += `</div>`;
+    listContainer.insertAdjacentHTML("beforeend", html);
+  } else {
+    listContainer.innerHTML = `<p class="text-white text-center">Inga växter hittades.</p>`;
+  }
+}
+
+function deletePlant(id) {
+  if (confirm("Är du säker?")) {
+    fetch(`${url}/${id}`, { method: "DELETE" })
+      .then((res) => res.json())
+      .then((data) => {
+        fetchData();
+        showFeedback(data.message);
+      });
+  }
+}
+
+function editPlant(id) {
   fetch(`${url}/${id}`)
-    .then((res) => {
-      // Om status inte är 200-299 (t.ex. 404 eller 500) kasta fel
-      if (!res.ok) throw new Error(`Server svarade med status: ${res.status}`);
-      return res.json();
-    })
-    .then((user) => {
-      console.log("Hämtad användardata:", user);
-      // Här kan du senare lägga till kod för att fylla i formuläret med user-data
-      // T.ex: userForm.firstName.value = user.firstName;
-    })
-    .catch((err) => console.error("Fetch error:", err));
+    .then((res) => res.json())
+    .then((plant) => {
+      plantForm.name.value = plant.name;
+      plantForm.species.value = plant.species;
+      plantForm.water.value = plant.water;
+      plantForm.height.value = plant.height;
+      plantForm.color.value = plant.color;
+      plantIdField.value = plant.id;
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
 }
 
-function deleteUser(id) {
-  console.log("Delete user with ID:", id);
-  // Kom ihåg att implementera delete-logiken här sen
-}
-
-userForm.addEventListener("submit", handleSubmit);
-
-function handleSubmit(e) {
+plantForm.addEventListener("submit", (e) => {
   e.preventDefault();
-  const serverUserObject = {
-    firstName: userForm.firstName.value,
-    lastName: userForm.lastName.value,
-    username: userForm.username.value,
-    color: userForm.color.value,
+
+  const plantData = {
+    name: plantForm.name.value,
+    species: plantForm.species.value,
+    water: plantForm.water.value,
+    height: plantForm.height.value,
+    color: plantForm.color.value,
   };
 
-  const request = new Request(url, {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-    },
-    body: JSON.stringify(serverUserObject),
-  });
+  const id = plantIdField.value;
+  let method = "POST";
 
-  fetch(request)
-    .then((response) => response.json()) // Läste in JSON svaret
+  if (id) {
+    method = "PUT";
+    plantData.id = id;
+  }
+
+  fetch(url, {
+    method: method,
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(plantData),
+  })
+    .then((res) => res.json())
     .then((data) => {
-      console.log("Svar från server:", data);
-      userForm.reset();
-      fetchData(); // Uppdatera listan direkt efter vi sparat
-    })
-    .catch((err) => console.error("Kunde inte spara:", err));
+      fetchData();
+      clearForm();
+      showFeedback(data.message);
+    });
+});
+
+document.getElementById("clearBtn").addEventListener("click", clearForm);
+function clearForm() {
+  plantForm.reset();
+  plantIdField.value = "";
+}
+
+const feedbackModal = new bootstrap.Modal(
+  document.getElementById("feedbackModal")
+);
+function showFeedback(message) {
+  document.getElementById("modalBody").innerText = message;
+  feedbackModal.show();
+}
+
+function translateColor(colorName, opacity) {
+  const colors = {
+    röd: "220, 53, 69",
+    grön: "25, 135, 84",
+    blå: "13, 110, 253",
+    gul: "255, 193, 7",
+    guld: "218, 165, 32",
+    rosa: "214, 51, 132",
+    vit: "255, 255, 255",
+    lila: "111, 66, 193",
+  };
+  const rgb = colors[colorName.toLowerCase()] || "255, 255, 255";
+  return `rgba(${rgb}, ${opacity})`;
 }

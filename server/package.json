@@ -1,10 +1,11 @@
 {
-  "name": "server",
+  "name": "gik339-projekt-vaxter",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Växtregister",
+  "main": "server/server.js",
   "scripts": {
-    "start": "nodemon server.js",
+    "start": "node server/server.js",
+    "dev": "nodemon server/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -12,7 +13,30 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "express": "^5.2.1",
+    "express": "^4.21.2",
     "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.0"
+  }
+}
+
+{
+  "name": "gik339-projekt-server",
+  "version": "1.0.0",
+  "description": "Backend för växtregister",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.2",
+    "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.0"
   }
 }
