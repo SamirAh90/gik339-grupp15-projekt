@@ -18,8 +18,8 @@ INSERT INTO res (id, firstName, lastName, username, color) VALUES
 (9, 'Johanna', 'Bashirian', 'Mervin.Grant', 'yellow'),
 (10, 'Thalia', 'Kozey', 'Ashley22', 'yellow');
 
-DROP TABLE res;
-DROP TABLE IF EXISTS res;
+-- DROP TABLE res;
+-- DROP TABLE IF EXISTS res;
 
 
 select * from res;
