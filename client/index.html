@@ -1,47 +1,84 @@
 <!DOCTYPE html>
+<!-- Anger dokumenttyp (HTML5) -->
 <html lang="sv">
   <head>
+    <!-- Teckenkodning så svenska tecken fungerar -->
     <meta charset="UTF-8" />
+
+    <!-- Gör sidan responsiv på olika skärmstorlekar -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Titel som visas i webbläsarfliken -->
     <title>Växtregister</title>
+
+    <!-- Länk till egen CSS-fil -->
     <link rel="stylesheet" href="style.css" />
+
+    <!-- Bootstrap CSS för layout och styling -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet" />
+
+    <!-- Bootstrap JavaScript (krävs för t.ex. modal) -->
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   </head>
-  <body>
-    <header class="text-center position-relative"> <img
-        src="https://images.unsplash.com/photo-1643392979567-c88f045da260?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-        alt="Garden" class="header-image opacity-50 h-100 w-100" /> <h1
-        class="display-1 fw-bold text-white position-absolute top-50 start-50 translate-middle">
-        Växtregister </h1> </header>
 
+  <body>
+    <!-- Sidhuvud med bakgrundsbild och titel -->
+    <header class="text-center position-relative">
+      <!-- Bakgrundsbild i header -->
+      <img
+        src="https://images.unsplash.com/photo-1643392979567-c88f045da260?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+        alt="Garden"
+        class="header-image opacity-50 h-100 w-100" />
+
+      <!-- Huvudrubrik placerad centrerad över bilden -->
+      <h1
+        class="display-1 fw-bold text-white position-absolute top-50 start-50 translate-middle">
+        Växtregister
+      </h1>
+    </header>
+
+    <!-- Huvudinnehåll -->
     <main class="mt-5 container">
+      <!-- Modal för feedback / information -->
       <div id="feedbackModal" class="modal fade" tabindex="-1">
         <div class="modal-dialog">
           <div class="modal-content">
+            <!-- Modalens header -->
             <div class="modal-header">
               <h5 class="modal-title">Info</h5>
+              <!-- Knapp för att stänga modal -->
               <button type="button" class="btn-close"
                 data-bs-dismiss="modal"></button>
             </div>
+
+            <!-- Innehåll som fylls via JavaScript -->
             <div class="modal-body" id="modalBody"></div>
+
+            <!-- Footer med stäng-knapp -->
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary"
-                data-bs-dismiss="modal">Stäng</button>
+                data-bs-dismiss="modal">
+                Stäng
+              </button>
             </div>
           </div>
         </div>
       </div>
 
+      <!-- Formulär-container -->
       <div class="bg-white bg-opacity-75 p-4 rounded shadow-sm mx-auto"
         style="max-width: 800px;">
         <h2 class="text-center mb-4">Hantera Växt</h2>
+
+        <!-- Formulär för att lägga till / redigera växt -->
         <form id="plantForm">
+          <!-- Dolt fält för växtens ID -->
           <input type="hidden" id="plantId" />
 
+          <!-- Fält för växtens namn -->
           <div class="mb-3 row">
             <label class="col-sm-3 fw-bold">Namn</label>
             <div class="col-sm-9">
@@ -49,6 +86,7 @@
             </div>
           </div>
 
+          <!-- Val av växttyp -->
           <div class="mb-3 row">
             <label class="col-sm-3 fw-bold">Typ</label>
             <div class="col-sm-9">
@@ -61,6 +99,7 @@
             </div>
           </div>
 
+          <!-- Val av vattenbehov -->
           <div class="mb-3 row">
             <label class="col-sm-3 fw-bold">Vattning</label>
             <div class="col-sm-9">
@@ -72,6 +111,7 @@
             </div>
           </div>
 
+          <!-- Fält för höjd i centimeter -->
           <div class="mb-3 row">
             <label class="col-sm-3 fw-bold">Höjd (cm)</label>
             <div class="col-sm-9">
@@ -80,26 +120,39 @@
             </div>
           </div>
 
+          <!-- Fält för färg -->
           <div class="mb-3 row">
             <label class="col-sm-3 fw-bold">Färg</label>
             <div class="col-sm-9">
-              <input class="form-control" type="text" name="color" required
+              <input
+                class="form-control"
+                type="text"
+                name="color"
+                required
                 placeholder="T.ex. Grön, Röd, Guld" />
+              <!-- Hjälptext -->
               <div class="form-text">Färgen påverkar kortets utseende.</div>
             </div>
           </div>
 
+          <!-- Knappar -->
           <div class="d-flex justify-content-end gap-3">
+            <!-- Rensar formuläret -->
             <button class="btn btn-outline-secondary" type="button"
-              id="clearBtn">Rensa</button>
+              id="clearBtn">
+              Rensa
+            </button>
+            <!-- Sparar växt -->
             <button class="btn btn-success" type="submit">Spara</button>
           </div>
         </form>
       </div>
 
+      <!-- Här visas listan med växter -->
       <div id="listContainer" class="mt-5 mb-5"></div>
     </main>
 
+    <!-- JavaScript-fil -->
     <script src="script.js"></script>
   </body>
 </html>

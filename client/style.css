@@ -1,31 +1,37 @@
+/* Sätter bakgrundsfärg med gradient och standardfont för hela sidan */
 body {
   background: linear-gradient(135deg, #1a2e1a 0%, #2d5a2d 50%, #1a2e1a 100%);
-  min-height: 100vh;
+  min-height: 100vh; /* Gör att body alltid täcker hela höjden */
   font-family: "Segoe UI", sans-serif;
 }
 
+/* Sidhuvudet */
 header {
-  height: 30vh;
-  overflow: hidden;
+  height: 30vh; /* Tar 30% av skärmens höjd */
+  overflow: hidden; /* Döljer det som går utanför */
   position: relative;
-  border-bottom: 5px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 5px solid rgba(255, 255, 255, 0.1); /* Lätt linje under header */
 }
 
+/* Bilden i headern */
 .header-image {
-  object-fit: cover;
-  filter: brightness(0.6);
+  object-fit: cover; /* Bilden täcker hela utrymmet utan att ändra proportioner */
+  filter: brightness(0.6); /* Gör bilden mörkare för bättre kontrast mot text */
 }
 
+/* Rubriken i headern */
 header h1 {
-  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8); /* Skugga för bättre läsbarhet */
 }
 
+/* Växtkort */
 .plant-card {
-  transition: transform 0.2s, box-shadow 0.2s;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s, box-shadow 0.2s; /* Mjuk animation vid hover */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Lätt skugga runt kortet */
 }
 
+/* Hover-effekt på växtkort */
 .plant-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.3);
+  transform: translateY(-5px); /* Kortet lyfts lite när musen är över */
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.3); /* Skuggan blir tydligare vid hover */
 }

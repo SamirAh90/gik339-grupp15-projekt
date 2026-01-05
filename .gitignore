@@ -1,3 +1,7 @@
-node_modules/
-*.db
-.DS_Store 
+# Ignorera mappen med alla installerade Node.js-paket, den kan bli väldigt stor 
+node_modules/   
+
+# Man kan lägga nedan filer också i framtiden för datasäkerhet 
+#.db            # Ignorera alla databasfiler (t.ex. plants.db)
+#.DS_Store       # Ignorera macOS-specifika systemfiler
+# .vscode/        # Ignorera VS Code-konfigurationsmappen
