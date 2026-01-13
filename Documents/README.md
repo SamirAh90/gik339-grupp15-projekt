@@ -48,3 +48,15 @@ curl -X POST http://localhost:3000/plants -H "Content-Type: application/json" -d
 ## Utveckling & Styling
 
 - Klienten ligger i `client/` och använder Bootstrap samt `style.css`.
+
+5. AI-användning
+
+I detta projekt har vi använt AI för vissa delar:
+
+Skriva utkast kommentarer på kod
+
+Planera och hjälpa till med att skriva utkast på kravspecifikationen
+
+Hjälp med mätning och förslag på bäst design av CSS
+
+Projektet refereras som GIK339 - Grupp 15.
